@@ -13,7 +13,7 @@ Two ~10-year-old girls who will recognise Airbnb's interface. The tone should fe
 ## Technical Approach
 
 - **Static HTML/CSS/JS** — single page, no framework
-- **Form submission** — EmailJS (free tier, client-side, no backend needed) to send booking confirmation emails
+- **Form submission** — EmailJS (free tier, client-side, no backend needed) to send booking confirmation emails. Requires setting up a free EmailJS account and creating a Service ID, Template ID, and Public Key — these will be configured during implementation as environment-like constants in the JS file
 - **Spam protection** — honeypot field, time-based submission check (minimum 3 seconds on page), EmailJS rate limiting
 - **Hosting** — local for now; can be deployed to Netlify, GitHub Pages, or Laravel Forge later
 - **Photos** — 21 HEIC photos in `/Sunshine B&B Photos/`, to be converted to optimised JPGs for web use
@@ -89,7 +89,7 @@ Warm, inviting description text:
 >
 > Your host Sally has thought of everything to make your stay special. This is more than just a place to sleep — it's a little adventure.
 
-"Show more" link that expands the full text (if we write more).
+The description above is the complete text. No "Show more" link needed.
 
 ### 7. Amenities — "What this place offers"
 
@@ -138,15 +138,16 @@ Positioned on the right side, sticky on scroll:
   - Minimum 1 night stay
 - **Guests**: dropdown (1-2 guests)
 - **Discount code**: text input field
-  - Valid code: a fun word (e.g., "SUNSHINE" or "NANSHOUSE" — to be decided)
-  - When valid code entered, price updates to show discount
+  - Valid code: **SUNSHINE** (case-insensitive)
+  - When valid code entered, the price breakdown updates live to show a 100% discount off the entire total (nightly rate + cleaning fee + service fee), bringing the total to £0
+  - Invalid codes show a subtle "Invalid code" message
 - **Reserve button**: Airbnb gradient pink button
 - **Price breakdown** (appears after dates selected):
   - £85 x N nights = £X
   - Cleaning fee: £25
   - Service fee: £15
-  - Discount (if code applied): -£X (showing full amount off)
-  - **Total**: £0 (if discount applied)
+  - Discount (if code applied): -£(full total) — 100% off everything
+  - **Total**: £0 (when discount applied), or full price (when no discount)
 - "You won't be charged yet" text below button
 
 ### 10. Booking Flow
