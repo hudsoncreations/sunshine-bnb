@@ -21,18 +21,18 @@ class Calendar {
     style.id = styleId;
     style.textContent = `
       .calendar { width: 100%; margin-top: 16px; }
-      .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-      .calendar-header button { background: none; border: none; cursor: pointer; font-size: 16px; padding: 8px; border-radius: 50%; }
+      .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+      .calendar-header button { background: none; border: none; cursor: pointer; font-size: 12px; padding: 8px; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: #222; transition: background 0.2s; }
       .calendar-header button:hover { background: #f7f7f7; }
-      .calendar-header h3 { font-size: 16px; font-weight: 600; }
+      .calendar-header h3 { font-size: 14px; font-weight: 600; }
       .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; }
-      .calendar-day-header { font-size: 12px; font-weight: 600; color: #717171; padding: 8px 0; }
-      .calendar-day { padding: 8px; font-size: 14px; cursor: pointer; border-radius: 50%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; }
+      .calendar-day-header { font-size: 12px; font-weight: 600; color: #717171; padding: 4px 0; }
+      .calendar-day { padding: 0; font-size: 13px; cursor: pointer; border-radius: 50%; aspect-ratio: 1; display: flex; align-items: center; justify-content: center; transition: background 0.15s; }
       .calendar-day:hover { background: #f7f7f7; }
-      .calendar-day.disabled { color: #ddd; cursor: default; }
+      .calendar-day.disabled { color: #b0b0b0; cursor: default; text-decoration: line-through; }
       .calendar-day.disabled:hover { background: none; }
-      .calendar-day.selected { background: #FF385C; color: white; font-weight: 600; }
-      .calendar-day.in-range { background: #FFF0F3; border-radius: 0; }
+      .calendar-day.selected { background: #222; color: white; font-weight: 600; }
+      .calendar-day.in-range { background: #f7f7f7; border-radius: 0; }
       .calendar-day.range-start { border-radius: 50% 0 0 50%; }
       .calendar-day.range-end { border-radius: 0 50% 50% 0; }
       .calendar-day.empty { cursor: default; }
