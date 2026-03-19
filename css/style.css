@@ -1135,6 +1135,7 @@ aside {
     position: relative;
     top: auto;
     order: -1;
+    overflow: visible;
   }
 
   /* Reviews grid: Single column */
