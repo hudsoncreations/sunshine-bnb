@@ -59,11 +59,11 @@ function updatePhoto() {
 // Initialize event listeners
 document.addEventListener('DOMContentLoaded', () => {
   // Map grid images to their indices in PHOTOS array
-  // Grid images: IMG_8025 (index 0), IMG_8037 (index 10), IMG_8034 (index 7), IMG_8036 (index 9), IMG_8042 (index 15)
+  // Grid images: hero/IMG_8025 or IMG_8037 on mobile (index 0), IMG_8037 (index 10), IMG_8034 (index 7), IMG_8036 (index 9), IMG_8042 (index 15)
   const gridImageIndices = [0, 10, 7, 9, 15];
 
   // Photo grid image clicks
-  const gridImages = document.querySelectorAll('.photo-grid img');
+  const gridImages = document.querySelectorAll('.photo-grid > img, .photo-grid > picture img');
   gridImages.forEach((img, index) => {
     img.addEventListener('click', () => {
       openGallery(gridImageIndices[index]);

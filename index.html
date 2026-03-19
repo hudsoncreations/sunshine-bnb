@@ -4,16 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Sunshine B&B · Airbnb</title>
+  <link rel="icon" type="image/png" href="images/favicon.png">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
   <!-- Navigation Bar -->
   <nav class="navbar">
     <div class="navbar-logo">
-      <svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-        <path d="M16 1c2 0 3.46.96 4.75 3.27l.53 1.07a424.77 424.77 0 0 1 5.48 12.58l.06.2a5.3 5.3 0 0 1-9.87 4.07l-.1-.18a5.3 5.3 0 0 1-10.06.01l-.1.18a5.3 5.3 0 0 1-9.87-4.07l.06-.2a424.77 424.77 0 0 1 5.48-12.58l.53-1.07C12.54 1.96 14 1 16 1z"/>
-      </svg>
-      <span>sunshine b&b</span>
+      <img src="images/airbnb-logo.png" alt="Airbnb">
     </div>
   </nav>
 
@@ -24,7 +22,10 @@
 
   <!-- Photo Grid -->
   <div class="photo-grid">
-    <img src="images/thumbs/IMG_8025.jpg" alt="Cosy cottage bedroom with colourful patchwork quilt, dolls house and garden view">
+    <picture>
+      <source media="(max-width: 743px)" srcset="images/thumbs/IMG_8037.jpg">
+      <img src="images/thumbs/IMG_8025.jpg" alt="Cosy cottage bedroom with colourful patchwork quilt, dolls house and garden view">
+    </picture>
     <img src="images/thumbs/IMG_8037.jpg" alt="Close-up of bed with Sunshine cushion and patchwork quilt">
     <img src="images/thumbs/IMG_8034.jpg" alt="View of the garden from the bedroom window">
     <img src="images/thumbs/IMG_8036.jpg" alt="Bookshelf with fairy lights and family photos">
@@ -342,6 +343,24 @@
           </div>
         </div>
       </div>
+
+      <!-- Location Section -->
+      <div class="location-section" id="location">
+        <h2>Where you'll be</h2>
+        <p class="location-address">Solihull, England, United Kingdom</p>
+        <div class="location-map">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2434.5!2d-1.7635!3d52.4195!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4870b9a1f2e3d4c5%3A0x1234567890abcdef!2s48+Walsgrave+Dr%2C+Solihull+B92+9PP!5e0!3m2!1sen!2suk!4v1710000000000"
+            width="100%"
+            height="400"
+            style="border:0; border-radius: 12px;"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade">
+          </iframe>
+        </div>
+        <p class="location-disclaimer">This listing's location is verified and the exact location will be provided after booking. <a href="#">Learn about verification.</a></p>
+      </div>
     </div>
 
     <!-- Right Column: Booking Widget -->
@@ -370,9 +389,8 @@
               <option value="2">2 guests</option>
             </select>
           </div>
+          <div id="calendarContainer"></div>
         </div>
-
-        <div id="calendarContainer"></div>
 
         <div class="discount-code">
           <label for="discountCode">Discount code</label>

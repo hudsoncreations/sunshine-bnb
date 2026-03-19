@@ -1,4 +1,5 @@
-// Calendar date picker with range selection
+// Calendar date picker with range selection (Airbnb-style dropdown)
+
 class Calendar {
   constructor() {
     this.currentMonth = new Date().getMonth();
@@ -8,6 +9,7 @@ class Calendar {
     this.selecting = 'checkin';
     this.onChange = null;
     this.containerId = null;
+    this.isOpen = false;
 
     // Inject CSS styles
     this.injectStyles();
@@ -20,7 +22,23 @@ class Calendar {
     const style = document.createElement('style');
     style.id = styleId;
     style.textContent = `
-      .calendar { width: 100%; margin-top: 16px; }
+      #calendarContainer {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: -1px;
+        right: -1px;
+        z-index: 50;
+        background: white;
+        border: 1px solid var(--color-border, #DDDDDD);
+        border-radius: 0 0 12px 12px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+        padding: 16px;
+      }
+      #calendarContainer.open {
+        display: block;
+      }
+      .calendar { width: 100%; }
       .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
       .calendar-header button { background: none; border: none; cursor: pointer; font-size: 12px; padding: 8px; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: #222; transition: background 0.2s; }
       .calendar-header button:hover { background: #f7f7f7; }
@@ -37,6 +55,13 @@ class Calendar {
       .calendar-day.range-end { border-radius: 0 50% 50% 0; }
       .calendar-day.empty { cursor: default; }
       .calendar-day.empty:hover { background: none; }
+      .calendar-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid #eee; }
+      .calendar-clear { font-size: 14px; font-weight: 600; text-decoration: underline; color: #222; background: none; border: none; cursor: pointer; padding: 4px 0; }
+      .calendar-clear:hover { color: #000; }
+      .calendar-close { font-size: 14px; font-weight: 600; color: white; background: #222; border: none; border-radius: 8px; padding: 8px 16px; cursor: pointer; }
+      .calendar-close:hover { background: #000; }
+      .booking-date-field.active { border-color: #222 !important; background-color: #f7f7f7; }
+      .booking-dates-row .booking-date-field.active { outline: 2px solid #222; outline-offset: -2px; z-index: 1; position: relative; }
     `;
     document.head.appendChild(style);
   }
@@ -117,6 +142,13 @@ class Calendar {
     }
 
     html += '</div>'; // calendar-grid
+
+    // Footer with Clear dates and Close buttons
+    html += '<div class="calendar-footer">';
+    html += '<button class="calendar-clear" id="calendarClear">Clear dates</button>';
+    html += '<button class="calendar-close" id="calendarClose">Close</button>';
+    html += '</div>';
+
     html += '</div>'; // calendar
 
     container.innerHTML = html;
@@ -134,16 +166,23 @@ class Calendar {
     const nextBtn = container.querySelector('#nextMonth');
 
     if (prevBtn) {
-      prevBtn.addEventListener('click', () => this.prevMonth());
+      prevBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.prevMonth();
+      });
     }
     if (nextBtn) {
-      nextBtn.addEventListener('click', () => this.nextMonth());
+      nextBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.nextMonth();
+      });
     }
 
     // Day clicks
     const days = container.querySelectorAll('.calendar-day:not(.disabled):not(.empty)');
     days.forEach(dayEl => {
       dayEl.addEventListener('click', (e) => {
+        e.stopPropagation();
         const dateStr = e.target.getAttribute('data-date');
         if (dateStr) {
           const [year, month, day] = dateStr.split('-').map(Number);
@@ -153,6 +192,24 @@ class Calendar {
         }
       });
     });
+
+    // Clear dates button
+    const clearBtn = container.querySelector('#calendarClear');
+    if (clearBtn) {
+      clearBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.clearDates();
+      });
+    }
+
+    // Close button
+    const closeBtn = container.querySelector('#calendarClose');
+    if (closeBtn) {
+      closeBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        this.close();
+      });
+    }
   }
 
   onDateClick(date) {
@@ -161,21 +218,109 @@ class Calendar {
       this.checkIn = date;
       this.checkOut = null;
       this.selecting = 'checkout';
+      this.highlightField('checkout');
     } else if (this.selecting === 'checkout') {
       if (date > this.checkIn) {
         this.checkOut = date;
+        this.selecting = 'checkin';
+        // Auto-close after both dates selected
+        this.close();
       } else {
         // Date is before or equal to check-in, restart selection
         this.checkIn = date;
         this.checkOut = null;
+        this.highlightField('checkout');
       }
     }
 
     // Update display
     this.updateDateDisplays();
 
+    // Re-render calendar (only if still open)
+    if (this.isOpen) {
+      this.render(this.containerId);
+      // Re-apply the open class since render replaces innerHTML
+      const container = document.getElementById(this.containerId);
+      if (container) {
+        container.classList.add('open');
+      }
+    }
+
+    // Call onChange callback
+    if (this.onChange) {
+      this.onChange();
+    }
+  }
+
+  // Open the calendar dropdown
+  open(mode) {
+    if (mode) {
+      this.selecting = mode;
+    }
+    this.isOpen = true;
+
+    const container = document.getElementById(this.containerId);
+    if (container) {
+      this.render(this.containerId);
+      container.classList.add('open');
+    }
+
+    this.highlightField(this.selecting);
+  }
+
+  // Close the calendar dropdown
+  close() {
+    this.isOpen = false;
+    const container = document.getElementById(this.containerId);
+    if (container) {
+      container.classList.remove('open');
+    }
+
+    // Remove active highlights
+    const checkinField = document.getElementById('checkinField');
+    const checkoutField = document.getElementById('checkoutField');
+    if (checkinField) checkinField.classList.remove('active');
+    if (checkoutField) checkoutField.classList.remove('active');
+  }
+
+  // Toggle calendar open/close
+  toggle(mode) {
+    if (this.isOpen && this.selecting === mode) {
+      this.close();
+    } else {
+      this.open(mode);
+    }
+  }
+
+  // Highlight the active date field
+  highlightField(field) {
+    const checkinField = document.getElementById('checkinField');
+    const checkoutField = document.getElementById('checkoutField');
+
+    if (checkinField) checkinField.classList.remove('active');
+    if (checkoutField) checkoutField.classList.remove('active');
+
+    if (field === 'checkin' && checkinField) {
+      checkinField.classList.add('active');
+    } else if (field === 'checkout' && checkoutField) {
+      checkoutField.classList.add('active');
+    }
+  }
+
+  // Clear selected dates
+  clearDates() {
+    this.checkIn = null;
+    this.checkOut = null;
+    this.selecting = 'checkin';
+    this.updateDateDisplays();
+    this.highlightField('checkin');
+
     // Re-render calendar
     this.render(this.containerId);
+    const container = document.getElementById(this.containerId);
+    if (container) {
+      container.classList.add('open');
+    }
 
     // Call onChange callback
     if (this.onChange) {
@@ -188,11 +333,23 @@ class Calendar {
     const checkoutDisplay = document.getElementById('checkoutDisplay');
 
     if (checkinDisplay) {
-      checkinDisplay.textContent = this.checkIn ? this.formatDate(this.checkIn) : 'Add date';
+      if (this.checkIn) {
+        checkinDisplay.textContent = this.formatDate(this.checkIn);
+        checkinDisplay.classList.add('selected');
+      } else {
+        checkinDisplay.textContent = 'Add date';
+        checkinDisplay.classList.remove('selected');
+      }
     }
 
     if (checkoutDisplay) {
-      checkoutDisplay.textContent = this.checkOut ? this.formatDate(this.checkOut) : 'Add date';
+      if (this.checkOut) {
+        checkoutDisplay.textContent = this.formatDate(this.checkOut);
+        checkoutDisplay.classList.add('selected');
+      } else {
+        checkoutDisplay.textContent = 'Add date';
+        checkoutDisplay.classList.remove('selected');
+      }
     }
   }
 
@@ -224,6 +381,12 @@ class Calendar {
     this.currentMonth = normalizedMonth;
     this.currentYear = targetYear;
     this.render(this.containerId);
+
+    // Keep calendar open after navigation
+    const container = document.getElementById(this.containerId);
+    if (container && this.isOpen) {
+      container.classList.add('open');
+    }
   }
 
   nextMonth() {
@@ -233,6 +396,12 @@ class Calendar {
       this.currentYear++;
     }
     this.render(this.containerId);
+
+    // Keep calendar open after navigation
+    const container = document.getElementById(this.containerId);
+    if (container && this.isOpen) {
+      container.classList.add('open');
+    }
   }
 
   getCheckIn() {
@@ -253,10 +422,39 @@ class Calendar {
 // Create global calendar instance
 window.calendar = new Calendar();
 
-// Auto-render on page load if container exists
+// Initialize on page load
 document.addEventListener('DOMContentLoaded', () => {
   const container = document.getElementById('calendarContainer');
-  if (container) {
-    window.calendar.render('calendarContainer');
+  if (!container) return;
+
+  // Pre-render calendar (hidden by default via CSS)
+  window.calendar.render('calendarContainer');
+
+  // Click handlers for date fields
+  const checkinField = document.getElementById('checkinField');
+  const checkoutField = document.getElementById('checkoutField');
+
+  if (checkinField) {
+    checkinField.addEventListener('click', (e) => {
+      e.stopPropagation();
+      window.calendar.toggle('checkin');
+    });
   }
+
+  if (checkoutField) {
+    checkoutField.addEventListener('click', (e) => {
+      e.stopPropagation();
+      window.calendar.toggle('checkout');
+    });
+  }
+
+  // Close calendar when clicking outside the booking widget
+  document.addEventListener('click', (e) => {
+    if (!window.calendar.isOpen) return;
+
+    const bookingWidget = document.querySelector('.booking-widget');
+    if (bookingWidget && !bookingWidget.contains(e.target)) {
+      window.calendar.close();
+    }
+  });
 });
