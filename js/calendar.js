@@ -49,7 +49,7 @@ class Calendar {
           box-shadow: none;
           border-top: 1px solid var(--color-border, #DDDDDD);
           padding: 16px 12px;
-          margin-bottom: 0;
+          margin-bottom: 24px;
         }
       }
       .calendar { width: 100%; }
@@ -69,7 +69,7 @@ class Calendar {
       .calendar-day.range-end { border-radius: 0 50% 50% 0; }
       .calendar-day.empty { cursor: default; }
       .calendar-day.empty:hover { background: none; }
-      .calendar-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 12px; border-top: 1px solid #eee; }
+      .calendar-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 12px; padding-top: 12px; padding-bottom: 8px; border-top: 1px solid #eee; }
       .calendar-clear { font-size: 14px; font-weight: 600; text-decoration: underline; color: #222; background: none; border: none; cursor: pointer; padding: 4px 0; }
       .calendar-clear:hover { color: #000; }
       .calendar-close { font-size: 14px; font-weight: 600; color: white; background: #222; border: none; border-radius: 8px; padding: 8px 16px; cursor: pointer; }

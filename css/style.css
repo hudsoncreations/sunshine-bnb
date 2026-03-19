@@ -1139,7 +1139,7 @@ aside {
   }
 
   .booking-dates {
-    margin-bottom: var(--spacing-xl);
+    margin-bottom: 40px !important;
   }
 
   /* Reviews grid: Single column */
