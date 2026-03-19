@@ -7,6 +7,11 @@ const SERVICE_FEE = 15;
 const VALID_DISCOUNT_CODE = 'sunshine';
 const PAGE_LOAD_TIME = Date.now();
 
+// EmailJS configuration — replace with real values from https://www.emailjs.com/
+const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID';
+const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
+const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY';
+
 // State
 let discountApplied = false;
 
@@ -333,6 +338,24 @@ function handleBookingForm() {
         total
       };
       console.log('Booking data:', bookingData);
+
+      // Send email notification (non-blocking — don't wait for it)
+      if (typeof emailjs !== 'undefined' && EMAILJS_SERVICE_ID !== 'YOUR_SERVICE_ID') {
+        emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+          guest_name: guestName,
+          guest_email: guestEmail || 'Not provided',
+          check_in: formatDate(checkIn),
+          check_out: formatDate(checkOut),
+          nights: nights.toString(),
+          guests: guests,
+          booking_ref: bookingRef,
+          discount_code: discountCode || 'None',
+          total_price: '£' + total,
+          special_requests: specialRequests || 'None'
+        }, EMAILJS_PUBLIC_KEY).catch(function(error) {
+          console.error('EmailJS error:', error);
+        });
+      }
     }
   });
 }
