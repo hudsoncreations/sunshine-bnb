@@ -49,7 +49,7 @@ class Calendar {
           box-shadow: none;
           border-top: 1px solid var(--color-border, #DDDDDD);
           padding: 16px 12px;
-          margin-bottom: 32px;
+          margin-bottom: 0;
         }
       }
       .calendar { width: 100%; }

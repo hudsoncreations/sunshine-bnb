@@ -1138,6 +1138,10 @@ aside {
     overflow: visible;
   }
 
+  .booking-dates {
+    margin-bottom: var(--spacing-xl);
+  }
+
   /* Reviews grid: Single column */
   .reviews-grid {
     grid-template-columns: 1fr;
