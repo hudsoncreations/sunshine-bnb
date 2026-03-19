@@ -38,6 +38,19 @@ class Calendar {
       #calendarContainer.open {
         display: block;
       }
+      @media (max-width: 743px) {
+        #calendarContainer {
+          position: relative;
+          top: auto;
+          left: auto;
+          right: auto;
+          border: none;
+          border-radius: 0;
+          box-shadow: none;
+          border-top: 1px solid var(--color-border, #DDDDDD);
+          padding: 16px 12px;
+        }
+      }
       .calendar { width: 100%; }
       .calendar-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
       .calendar-header button { background: none; border: none; cursor: pointer; font-size: 12px; padding: 8px; border-radius: 50%; width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; color: #222; transition: background 0.2s; }
