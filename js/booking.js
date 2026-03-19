@@ -178,16 +178,24 @@ function handleDiscountCode() {
 // Handle reserve button click
 function handleReserveButton() {
   const reserveBtn = document.querySelector('.btn-reserve');
+  const mobileReserveBtn = document.querySelector('.mobile-reserve');
   const bookingModal = document.getElementById('bookingModal');
 
-  if (!reserveBtn || !bookingModal) return;
+  if (!bookingModal) return;
 
-  reserveBtn.addEventListener('click', () => {
+  // Function to handle reserve action
+  const handleReserve = () => {
     const checkIn = window.calendar.getCheckIn();
     const checkOut = window.calendar.getCheckOut();
 
     // Validate dates are selected
     if (!checkIn || !checkOut) {
+      // Scroll to booking widget on mobile if dates not selected
+      const bookingWidget = document.querySelector('.booking-widget');
+      if (bookingWidget && window.innerWidth <= 743) {
+        bookingWidget.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+
       // Show error by adding red border to date fields
       const checkinField = document.getElementById('checkinField');
       const checkoutField = document.getElementById('checkoutField');
@@ -211,7 +219,17 @@ function handleReserveButton() {
 
     // Show booking modal
     bookingModal.style.display = 'flex';
-  });
+  };
+
+  // Add click handler to main reserve button
+  if (reserveBtn) {
+    reserveBtn.addEventListener('click', handleReserve);
+  }
+
+  // Add click handler to mobile reserve button
+  if (mobileReserveBtn) {
+    mobileReserveBtn.addEventListener('click', handleReserve);
+  }
 }
 
 // Handle closing booking modal
