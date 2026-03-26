@@ -8,9 +8,9 @@ const VALID_DISCOUNT_CODE = 'sunshine';
 const PAGE_LOAD_TIME = Date.now();
 
 // EmailJS configuration — replace with real values from https://www.emailjs.com/
-const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID';
-const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
-const EMAILJS_PUBLIC_KEY = 'YOUR_PUBLIC_KEY';
+const EMAILJS_SERVICE_ID = 'service_16c7l4r';
+const EMAILJS_TEMPLATE_ID = 'template_xg4aov2';
+const EMAILJS_PUBLIC_KEY = 'vtEjC-vwC54CxmoK-';
 
 // State
 let discountApplied = false;
