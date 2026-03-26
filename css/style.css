@@ -531,66 +531,76 @@ aside {
   border-top: 1px solid var(--color-border);
 }
 
-.coming-soon-badge {
-  display: inline-block;
-  background: var(--gradient-cta);
-  color: white;
-  font-size: 13px;
-  font-weight: 600;
-  padding: 6px 16px;
-  border-radius: 20px;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-  margin-bottom: var(--spacing-lg);
-}
-
 .coming-soon-card {
+  position: relative;
   display: flex;
   align-items: center;
   gap: var(--spacing-xl);
-  background: #f7f7f7;
+  background: linear-gradient(135deg, #fef9f3 0%, #fdf2f8 50%, #f0f9ff 100%);
   border-radius: var(--radius-lg);
-  padding: var(--spacing-xl);
+  padding: var(--spacing-xl) var(--spacing-xl) var(--spacing-xl) var(--spacing-2xl);
+  border: 1px solid var(--color-border);
+  overflow: hidden;
+}
+
+.coming-soon-badge {
+  position: absolute;
+  top: 0;
+  left: 0;
+  background: var(--gradient-cta);
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 8px 20px 8px 16px;
+  border-radius: 0 0 12px 0;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
 }
 
 .coming-soon-image {
   flex-shrink: 0;
-  width: 180px;
+  width: 160px;
 }
 
 .coming-soon-image img {
   width: 100%;
   height: auto;
+  filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.1));
 }
 
 .coming-soon-info h2 {
   font-size: 22px;
   font-weight: 600;
-  margin-bottom: var(--spacing-sm);
+  margin-bottom: 4px;
 }
 
 .coming-soon-info p {
-  font-size: 16px;
+  font-size: 15px;
   line-height: 1.6;
-  color: var(--color-primary);
+  color: var(--color-secondary);
 }
 
 .coming-soon-details {
-  margin-top: var(--spacing-sm);
+  display: inline-block;
+  margin-top: var(--spacing-md);
+  font-size: 14px;
   font-weight: 600;
-  color: var(--airbnb-rausch) !important;
+  color: white !important;
+  background: var(--gradient-cta);
+  padding: 10px 24px;
+  border-radius: 8px;
 }
 
 @media (max-width: 743px) {
   .coming-soon-card {
     flex-direction: column;
     text-align: center;
+    padding: 48px var(--spacing-lg) var(--spacing-lg);
     gap: var(--spacing-md);
-    padding: var(--spacing-lg);
   }
 
   .coming-soon-image {
-    width: 140px;
+    width: 130px;
   }
 }
 
